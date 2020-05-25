@@ -11,11 +11,11 @@ def to_binary(decimal)
 end
 
 def to_decimal(binary)
-  binary = binary.to_s.split('').map {|digit| digit.to_i}
+  binary_digits = binary.to_s.split('').reverse.map {|digit| digit.to_i}
 
-  converted_digits = binary.map.with_index do |digit, index|
+  converted_digits = binary_digits.map.with_index do |digit, index|
     if digit == 1
-      digit * 2**(binary.length - 1 - index)
+      digit * 2**(index)
     else
       digit
     end
@@ -27,18 +27,22 @@ end
 puts "Numerical base converter".center(80)
 puts "--------------".center(80)
 puts "Which bases would you like to convert to and from?"
-puts "(1) Decimal to binary"
-puts "(2) Binary to decimal"
 
 modes = {
   1 => [:dec_to_bin, "Decimal", "Binary"],
   2 => [:bin_to_dec, "Binary", "Decimal"]
 }
 
-selected_mode = gets.chomp.to_i
+selected_mode = nil
+until modes.has_key? selected_mode
+  puts "Your options are"
+  puts "(1) Decimal to binary"
+  puts "(2) Binary to decimal"
+
+  selected_mode = gets.chomp.to_i
+end
 
 puts "Please enter the number you'd like to convert"
-
 number = gets.chomp
 
 if modes[selected_mode].first == :bin_to_dec
@@ -46,5 +50,6 @@ if modes[selected_mode].first == :bin_to_dec
 else
   answer = to_binary number
 end
+
 print "Here you go => "
 puts "#{number} in #{modes[selected_mode].last} is #{answer}."
